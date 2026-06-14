@@ -1,0 +1,11 @@
+metric,value
+legitimate_success_rate,1.0
+sensitive_access_block_rate,1.0
+malicious_block_rate,1.0
+false_negative_rate,0.0
+false_positive_rate,0.0
+audit_coverage_rate,1.0
+tool_call_success_rate,0.38461538461538464
+average_latency_ms,0.29438461538461536
+p95_latency_ms,1.0539999999999972
+agent_error_rate,0.0
