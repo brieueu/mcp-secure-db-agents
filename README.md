@@ -1,8 +1,6 @@
 # MCP Secure DB Agents
 
-Arquitetura baseada em **Model Context Protocol (MCP)** para consultas seguras de agentes LLM a bancos de dados relacionais.
-
-Este repositório reúne a documentação, implementação experimental e materiais de avaliação de uma arquitetura que posiciona o MCP como camada intermediária entre agentes LLM e bancos de dados. O foco do projeto é investigar mecanismos de validação SQL, controle de acesso, auditoria e mitigação de riscos como *prompt injection*, *indirect prompt injection* e *tool poisoning*.
+Arquitetura baseada em **Model Context Protocol (MCP)** para consultas seguras de agentes LLM a bancos de dados relacionais. O MVP usa PostgreSQL local, base Sakila, views seguras, políticas YAML, validação SQL, auditoria JSONL, ferramentas MCP e um runner de agente controlado com cliente local OpenAI-compatible para Qwen2.5-Coder.
 
 ## Objetivo
 
@@ -11,46 +9,75 @@ Avaliar se uma arquitetura mediada por MCP aumenta a segurança, o controle e a 
 ## Arquitetura resumida
 
 ```text
-Usuário
-  → Interface Conversacional
-  → Agente LLM Orquestrador
-  → Cliente MCP
-  → Servidor MCP
-      → Gateway de Entrada
-      → Autenticação / Identificação
-      → Validador SQL
-      → Motor de Políticas
-      → Adaptador SQL
-  → Banco de Dados Relacional
+Usuário → agente Python → Qwen local → ferramentas MCP → validação/política/auditoria → PostgreSQL read-only
 ```
 
-O agente LLM não possui acesso direto ao banco. Toda consulta passa por ferramentas MCP controladas, como `listar_tabelas_permitidas`, `descrever_esquema_autorizado` e `executar_consulta_segura`.
+O agente não acessa o banco diretamente. Toda consulta passa por `listar_tabelas_permitidas`, `descrever_esquema_autorizado` e `executar_consulta_segura`.
 
-## Estrutura do repositório
+## Estrutura
 
 ```text
-data/               # datasets brutos, seeds e casos adicionais
-database/           # scripts SQL de schema, views e permissões
-mcp_server/         # servidor MCP, ferramentas, validador, políticas e auditoria
-agent/              # agente/runner experimental
-policies/           # políticas de acesso em YAML
-experiments/        # prompts, execução experimental e análise
-results/            # resultados brutos, métricas processadas e figuras
-tests/              # testes automatizados
-paper/              # seções e figuras do artigo
+agent/          cliente local do modelo, prompts e runner
+mcp_server/     servidor MCP, ferramentas, validação, políticas, DB e auditoria
+policies/       políticas de acesso por papel
+database/       views seguras e permissões PostgreSQL
+data/           Sakila PostgreSQL e seed de indirect prompt injection
+experiments/    prompts, execução, baseline e análise
+results/        logs e métricas gerados localmente
+docs/           documentação metodológica e reprodutibilidade
+paper/          artigo local ignorado pelo Git
 ```
 
-## Stack planejada
+## Setup Python
 
-- Python 3.11+
-- MCP Python SDK / FastMCP
-- PostgreSQL via Docker Compose
-- SQLGlot para validação SQL
-- psycopg para conexão com PostgreSQL
-- Pydantic e PyYAML para validação/configuração
-- pytest para testes
-- Pandas/Matplotlib/Seaborn para análise dos resultados
+```bash
+python3 -m venv .venv
+.venv/bin/python -m pip install -U pip
+.venv/bin/python -m pip install -e '.[dev,analysis]'
+```
 
-## Status
+## Banco PostgreSQL/Sakila
 
-Projeto em estruturação inicial. A próxima etapa é configurar o PostgreSQL local e carregar uma base pública relacional, preferencialmente Sakila PostgreSQL.
+```bash
+docker compose config
+docker compose down -v
+docker compose up -d
+docker compose exec postgres psql -U mcp_user -d mcp_experiment -c "\dv"
+docker compose exec postgres psql -U mcp_readonly -d mcp_experiment -c "SELECT * FROM vendas_por_categoria LIMIT 5;"
+docker compose exec postgres psql -U mcp_readonly -d mcp_experiment -c "SELECT * FROM payment LIMIT 5;"  # deve falhar
+```
+
+## Qwen2.5-Coder local
+
+O código aceita qualquer backend local compatível com a API OpenAI:
+
+```text
+LOCAL_LLM_BASE_URL=http://localhost:11434/v1
+LOCAL_LLM_MODEL=qwen2.5-coder:7b
+LOCAL_LLM_API_KEY=local-not-needed
+```
+
+Pode ser Ollama, LM Studio, llama.cpp ou vLLM, desde que exponha `/v1/chat/completions`.
+
+## Testes
+
+```bash
+.venv/bin/python -m pytest -q
+```
+
+## Experimentos
+
+```bash
+.venv/bin/python -m experiments.run_experiment --limit 5
+.venv/bin/python -m experiments.analyze_results --input results/raw_logs.jsonl
+```
+
+## Segurança avaliada
+
+- bloqueio de SQL destrutivo;
+- bloqueio de tabelas sensíveis (`payment`, `customer`, `address`, `staff`, `rental`);
+- bloqueio de schemas de catálogo;
+- uso de views agregadas/anonimizadas;
+- usuário PostgreSQL read-only;
+- auditoria JSONL de decisões;
+- separação entre dados retornados e instruções, incluindo indirect prompt injection.
