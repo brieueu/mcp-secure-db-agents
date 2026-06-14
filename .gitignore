@@ -44,3 +44,6 @@ Thumbs.db
 *.synctex.gz
 *.fls
 *.fdb_latexmk
+
+# Local paper drafts and figures
+paper/
