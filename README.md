@@ -10,6 +10,16 @@
   <a href="CITATION.cff">Citations</a>
 </p>
 
+<p align="center">
+  <img src="https://img.shields.io/badge/Python-3.11%2B-3776AB?logo=python&logoColor=white" alt="Python 3.11+">
+  <img src="https://img.shields.io/badge/PostgreSQL-Sakila-4169E1?logo=postgresql&logoColor=white" alt="PostgreSQL Sakila">
+  <img src="https://img.shields.io/badge/Docker-Compose-2496ED?logo=docker&logoColor=white" alt="Docker Compose">
+  <img src="https://img.shields.io/badge/MCP-Model%20Context%20Protocol-2E8B57" alt="Model Context Protocol">
+  <img src="https://img.shields.io/badge/LLM-Qwen2.5--Coder-8A2BE2" alt="Qwen2.5-Coder">
+  <img src="https://img.shields.io/badge/Tests-pytest-0A9EDC?logo=pytest&logoColor=white" alt="pytest">
+  <img src="https://visitor-badge.laobi.icu/badge?page_id=brieueu.mcp-secure-db-agents" alt="visitantes">
+</p>
+
 Arquitetura baseada em **Model Context Protocol (MCP)** para consultas seguras de agentes LLM a bancos de dados relacionais. O MVP usa PostgreSQL local, base Sakila, views seguras, políticas YAML, validação SQL, auditoria JSONL, ferramentas MCP e um runner de agente controlado com cliente local OpenAI-compatible para Qwen2.5-Coder.
 
 ## Objetivo
