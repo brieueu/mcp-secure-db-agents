@@ -87,7 +87,6 @@ database/       views seguras e permissões PostgreSQL
 data/           Sakila PostgreSQL e seed de indirect prompt injection
 experiments/    prompts, execução, baseline e análise
 results/        logs e métricas gerados localmente
-docs/           documentação metodológica e reprodutibilidade
 paper/          artigo local ignorado pelo Git
 ```
 
