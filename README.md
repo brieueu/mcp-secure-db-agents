@@ -20,15 +20,13 @@
   <img src="https://visitor-badge.laobi.icu/badge?page_id=brieueu.mcp-secure-db-agents" alt="visitantes">
 </p>
 
-O avanço dos Grandes Modelos de Linguagem (LLMs) impulsionou o desenvolvimento de agentes capazes de interagir com ferramentas externas e bancos de dados relacionais por meio de linguagem natural. Apesar do potencial prático para democratizar o acesso a dados estruturados, a conexão direta entre agentes LLM e bancos de dados introduz riscos críticos e sistêmicos. Tais vulnerabilidades incluem a geração de consultas incompatíveis com políticas organizacionais, o vazamento de informações sensíveis e a potencial execução de comandos destrutivos, como `DROP`, `DELETE` ou `UPDATE`. Esses riscos são substancialmente exacerbados pela suscetibilidade dos modelos a ataques de prompt injection e indirect prompt injection.
+Implementação e avaliação de uma arquitetura baseada em **Model Context Protocol (MCP)** para mediar consultas de agentes LLM a bancos de dados relacionais. O projeto investiga como uma camada MCP controlada pode reduzir riscos de acesso direto ao banco e, ao mesmo tempo, preservar a utilidade das respostas em consultas analíticas.
 
-Nesse cenário, o **Model Context Protocol (MCP)** tem emergido como um padrão arquitetural para organizar a comunicação entre modelos e sistemas externos. Contudo, embora o protocolo facilite a interoperabilidade, ele também introduz novas superfícies de ataque. Isso exige que seu uso transcenda a mera integração técnica, passando a atuar fundamentalmente como uma fronteira estrutural de segurança e governança.
+O MVP utiliza PostgreSQL/Sakila, views seguras, políticas YAML, validação SQL, auditoria JSONL, ferramentas MCP e um runner local compatível com Qwen2.5-Coder. A avaliação compara a arquitetura mediada com um baseline de acesso direto, considerando segurança, controle, rastreabilidade e qualidade das respostas.
 
 ## Objetivo
 
-O objetivo central deste trabalho é investigar e avaliar uma arquitetura baseada no Model Context Protocol (MCP) atuando como uma camada de mediação especializada entre agentes LLM e bancos de dados relacionais. A premissa estrutural do projeto baseia-se em impedir o acesso direto do agente aos dados, redirecionando a interação para um servidor MCP restrito e encarregado de expor ferramentas controladas.
-
-Para garantir a integridade do sistema, a arquitetura implementa mecanismos específicos para validar consultas SQL intermediárias, aplicar políticas de autorização baseadas em privilégios, restringir operações perigosas e registrar continuamente os eventos operacionais para fins de auditoria. A eficácia da solução é avaliada empiricamente frente a múltiplos cenários: operações benignas, requisições envolvendo dados sensíveis e testes adversariais, englobando tentativas de injeção de instruções e envio de comandos destrutivos. Desse modo, busca-se demonstrar em que medida a adoção do MCP aprimora o controle de acesso, a rastreabilidade e a segurança da aplicação.
+Comparar a mediação por MCP com acesso direto ao banco, medindo segurança, controle, rastreabilidade e utilidade das respostas.
 
 ## Arquitetura proposta
 
@@ -95,15 +93,13 @@ docs/           documentação metodológica e reprodutibilidade
 paper/          artigo local ignorado pelo Git
 ```
 
-## Segurança avaliada
+## Critérios de avaliação
 
-- bloqueio de SQL destrutivo;
-- bloqueio de tabelas sensíveis (`payment`, `customer`, `address`, `staff`, `rental`);
-- bloqueio de schemas de catálogo;
-- uso de views agregadas/anonimizadas;
-- usuário PostgreSQL read-only;
-- auditoria JSONL de decisões;
-- separação entre dados retornados e instruções, incluindo indirect prompt injection.
+- bloqueio de SQL destrutivo, tabelas sensíveis e schemas de catálogo;
+- uso de views agregadas/anonimizadas e usuário PostgreSQL read-only;
+- rastreabilidade por auditoria JSONL;
+- resistência a indirect prompt injection;
+- comparação com baseline direto em taxa de sucesso, recusas corretas e utilidade das respostas.
 
 ## Licença
 
