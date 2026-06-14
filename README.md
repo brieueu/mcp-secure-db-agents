@@ -124,3 +124,17 @@ Pode ser Ollama, LM Studio, llama.cpp ou vLLM, desde que exponha `/v1/chat/compl
 - usuário PostgreSQL read-only;
 - auditoria JSONL de decisões;
 - separação entre dados retornados e instruções, incluindo indirect prompt injection.
+
+## Licença
+
+Este projeto é distribuído sob a licença MIT. Consulte o arquivo [`LICENSE`](LICENSE) para os termos completos de uso, modificação e distribuição do código.
+
+## Como citar
+
+Se este repositório for usado em pesquisa acadêmica, cite o software usando os metadados disponíveis em [`CITATION.cff`](CITATION.cff). No GitHub, a opção **Cite this repository** usa esse arquivo para gerar citações automaticamente.
+
+Citação sugerida em texto:
+
+```text
+Vieira, José Gabriel de Almeida. MCP Secure DB Agents. Versão 0.1.0, 2026. Disponível em: https://github.com/brieueu/mcp-secure-db-agents.
+```
