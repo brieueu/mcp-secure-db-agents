@@ -1,4 +1,14 @@
-# MCP Secure DB Agents
+<p align="center">
+  <img src="assets/cover.png" alt="Avaliação de uma Arquitetura Baseada em Model Context Protocol para Agentes LLM em Consultas Seguras a Bancos de Dados Relacionais" width="100%">
+</p>
+
+<h1 align="center">MCP Secure DB Agents</h1>
+
+<p align="center">
+  <a href="https://drive.google.com/file/d/1HmPmwuPs4wqTcEw_dlu4C-D6iK2_IWm-/view?usp=sharing">Artigos preliminares</a> |
+  <a href="LICENSE">Licença MIT</a> |
+  <a href="CITATION.cff">Citations</a>
+</p>
 
 Arquitetura baseada em **Model Context Protocol (MCP)** para consultas seguras de agentes LLM a bancos de dados relacionais. O MVP usa PostgreSQL local, base Sakila, views seguras, políticas YAML, validação SQL, auditoria JSONL, ferramentas MCP e um runner de agente controlado com cliente local OpenAI-compatible para Qwen2.5-Coder.
 
@@ -138,3 +148,25 @@ Citação sugerida em texto:
 ```text
 Vieira, José Gabriel de Almeida. MCP Secure DB Agents. Versão 0.1.0, 2026. Disponível em: https://github.com/brieueu/mcp-secure-db-agents.
 ```
+
+## Referências bibliográficas
+
+[1] MODEL CONTEXT PROTOCOL. Architecture overview. 2026. Disponível em: https://modelcontextprotocol.io/docs/learn/architecture. Acesso em: 13 jun. 2026.
+
+[2] HOU, Xinyi; ZHAO, Yanjie; WANG, Shenao; WANG, Haoyu. Model Context Protocol (MCP): Landscape, Security Threats, and Future Research Directions. arXiv preprint arXiv:2503.23278, 2025. Disponível em: https://arxiv.org/abs/2503.23278. Acesso em: 11 jun. 2026.
+
+[3] LUO, Ziyang et al. MCP-Universe: Benchmarking Large Language Models with Real-World Model Context Protocol Servers. arXiv preprint arXiv:2508.14704, 2025. Disponível em: https://arxiv.org/pdf/2508.14704. Acesso em: 11 jun. 2026.
+
+[4] TONNARELLI, Marco; SCARAMUZZA, Filippo; HARRER, Simon; DIETZ, Linus W. Data Product MCP: Chat with your Enterprise Data. arXiv preprint arXiv:2601.08687, 2026. Disponível em: https://arxiv.org/abs/2601.08687. Acesso em: 11 jun. 2026.
+
+[5] YANG, Ningyuan et al. IoT-MCP: Bridging LLMs and IoT Systems Through Model Context Protocol. arXiv preprint arXiv:2510.01260, 2025. Disponível em: https://arxiv.org/abs/2510.01260. Acesso em: 11 jun. 2026.
+
+[6] YOUNG, Sarah. Protecting against indirect prompt injection attacks in MCP. Microsoft for Developers Blog, 2025. Disponível em: https://devblogs.microsoft.com/. Acesso em: 11 jun. 2026.
+
+[7] WANG, Boyu. MCP Tool Poisoning (CVE-2025-54136): A Structural Vulnerability in Agent Context. TrueFoundry Blog, 2026. Disponível em: https://www.truefoundry.com/. Acesso em: 11 jun. 2026.
+
+[8] KUMAR, Varun. MCP Security Vulnerabilities: How to Prevent Prompt Injection and Tool Poisoning Attacks in 2026. Practical DevSecOps, 2025. Disponível em: https://www.practical-devsecops.com/. Acesso em: 11 jun. 2026.
+
+[9] IEEE XPLORE. Model Context Contracts: MCP-Enabled Framework to Integrate LLMs With Blockchain. IEEE Xplore. Disponível em: https://ieeexplore.ieee.org/. Acesso em: 11 jun. 2026.
+
+[10] IEEE XPLORE. A Comprehensive Study and Implementation of Agentic AI via MCP Servers. IEEE Xplore. Disponível em: https://ieeexplore.ieee.org/. Acesso em: 11 jun. 2026.
