@@ -20,11 +20,15 @@
   <img src="https://visitor-badge.laobi.icu/badge?page_id=brieueu.mcp-secure-db-agents" alt="visitantes">
 </p>
 
-Arquitetura baseada em **Model Context Protocol (MCP)** para consultas seguras de agentes LLM a bancos de dados relacionais. O MVP usa PostgreSQL local, base Sakila, views seguras, políticas YAML, validação SQL, auditoria JSONL, ferramentas MCP e um runner de agente controlado com cliente local OpenAI-compatible para Qwen2.5-Coder.
+O avanço dos Grandes Modelos de Linguagem (LLMs) impulsionou o desenvolvimento de agentes capazes de interagir com ferramentas externas e bancos de dados relacionais por meio de linguagem natural. Apesar do potencial prático para democratizar o acesso a dados estruturados, a conexão direta entre agentes LLM e bancos de dados introduz riscos críticos e sistêmicos. Tais vulnerabilidades incluem a geração de consultas incompatíveis com políticas organizacionais, o vazamento de informações sensíveis e a potencial execução de comandos destrutivos, como `DROP`, `DELETE` ou `UPDATE`. Esses riscos são substancialmente exacerbados pela suscetibilidade dos modelos a ataques de prompt injection e indirect prompt injection.
+
+Nesse cenário, o **Model Context Protocol (MCP)** tem emergido como um padrão arquitetural para organizar a comunicação entre modelos e sistemas externos. Contudo, embora o protocolo facilite a interoperabilidade, ele também introduz novas superfícies de ataque. Isso exige que seu uso transcenda a mera integração técnica, passando a atuar fundamentalmente como uma fronteira estrutural de segurança e governança.
 
 ## Objetivo
 
-Avaliar se uma arquitetura mediada por MCP aumenta a segurança, o controle e a rastreabilidade de consultas realizadas por agentes LLM em bancos de dados relacionais, quando comparada a uma integração direta entre agente e banco.
+O objetivo central deste trabalho é investigar e avaliar uma arquitetura baseada no Model Context Protocol (MCP) atuando como uma camada de mediação especializada entre agentes LLM e bancos de dados relacionais. A premissa estrutural do projeto baseia-se em impedir o acesso direto do agente aos dados, redirecionando a interação para um servidor MCP restrito e encarregado de expor ferramentas controladas.
+
+Para garantir a integridade do sistema, a arquitetura implementa mecanismos específicos para validar consultas SQL intermediárias, aplicar políticas de autorização baseadas em privilégios, restringir operações perigosas e registrar continuamente os eventos operacionais para fins de auditoria. A eficácia da solução é avaliada empiricamente frente a múltiplos cenários: operações benignas, requisições envolvendo dados sensíveis e testes adversariais, englobando tentativas de injeção de instruções e envio de comandos destrutivos. Desse modo, busca-se demonstrar em que medida a adoção do MCP aprimora o controle de acesso, a rastreabilidade e a segurança da aplicação.
 
 ## Arquitetura proposta
 
@@ -89,50 +93,6 @@ experiments/    prompts, execução, baseline e análise
 results/        logs e métricas gerados localmente
 docs/           documentação metodológica e reprodutibilidade
 paper/          artigo local ignorado pelo Git
-```
-
-## Setup Python
-
-```bash
-python3 -m venv .venv
-.venv/bin/python -m pip install -U pip
-.venv/bin/python -m pip install -e '.[dev,analysis]'
-```
-
-## Banco PostgreSQL/Sakila
-
-```bash
-docker compose config
-docker compose down -v
-docker compose up -d
-docker compose exec postgres psql -U mcp_user -d mcp_experiment -c "\dv"
-docker compose exec postgres psql -U mcp_readonly -d mcp_experiment -c "SELECT * FROM vendas_por_categoria LIMIT 5;"
-docker compose exec postgres psql -U mcp_readonly -d mcp_experiment -c "SELECT * FROM payment LIMIT 5;"  # deve falhar
-```
-
-## Qwen2.5-Coder local
-
-O código aceita qualquer backend local compatível com a API OpenAI:
-
-```text
-LOCAL_LLM_BASE_URL=http://localhost:11434/v1
-LOCAL_LLM_MODEL=qwen2.5-coder:7b
-LOCAL_LLM_API_KEY=local-not-needed
-```
-
-Pode ser Ollama, LM Studio, llama.cpp ou vLLM, desde que exponha `/v1/chat/completions`.
-
-## Testes
-
-```bash
-.venv/bin/python -m pytest -q
-```
-
-## Experimentos
-
-```bash
-.venv/bin/python -m experiments.run_experiment --limit 5
-.venv/bin/python -m experiments.analyze_results --input results/raw_logs.jsonl
 ```
 
 ## Segurança avaliada
