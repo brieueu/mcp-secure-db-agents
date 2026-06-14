@@ -22,8 +22,6 @@
 
 Implementação e avaliação de uma arquitetura baseada em **Model Context Protocol (MCP)** para mediar consultas de agentes LLM a bancos de dados relacionais. O projeto investiga como uma camada MCP controlada pode reduzir riscos de acesso direto ao banco e, ao mesmo tempo, preservar a utilidade das respostas em consultas analíticas.
 
-O MVP utiliza PostgreSQL/Sakila, views seguras, políticas YAML, validação SQL, auditoria JSONL, ferramentas MCP e um runner local compatível com Qwen2.5-Coder. A avaliação compara a arquitetura mediada com um baseline de acesso direto, considerando segurança, controle, rastreabilidade e qualidade das respostas.
-
 ## Objetivo
 
 Comparar a mediação por MCP com acesso direto ao banco, medindo segurança, controle, rastreabilidade e utilidade das respostas.
@@ -79,7 +77,7 @@ flowchart LR
 
 A arquitetura separa a geração de SQL da sua execução. O modelo local propõe uma consulta a partir do esquema autorizado, mas o servidor MCP só executa o SQL depois de validar o comando, verificar objetos permitidos, aplicar a política do papel ativo e registrar a decisão em auditoria.
 
-## Estrutura
+## Estrutura essencial do projeto
 
 ```text
 agent/          cliente local do modelo, prompts e runner
