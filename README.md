@@ -1,10 +1,10 @@
 # MCP Secure DB Agents
 
-Arquitetura baseada em **Model Context Protocol (MCP)** para consultas seguras de agentes LLM a bancos de dados relacionais. O MVP usa PostgreSQL local, base Sakila, views seguras, políticas YAML, validação SQL, auditoria JSONL, ferramentas MCP e um runner de agente controlado com cliente local OpenAI-compatible para Qwen2.5-Coder.
+Implementação e avaliação de uma arquitetura baseada em **Model Context Protocol (MCP)** para mediar consultas de agentes LLM a bancos relacionais. O MVP usa PostgreSQL/Sakila, views seguras, políticas YAML, validação SQL, auditoria JSONL, ferramentas MCP e um runner local compatível com Qwen2.5-Coder.
 
 ## Objetivo
 
-Avaliar se uma arquitetura mediada por MCP aumenta a segurança, o controle e a rastreabilidade de consultas realizadas por agentes LLM em bancos de dados relacionais, quando comparada a uma integração direta entre agente e banco.
+Comparar a mediação por MCP com acesso direto ao banco, medindo segurança, controle, rastreabilidade e utilidade das respostas.
 
 ## Arquitetura resumida
 
@@ -72,12 +72,10 @@ Pode ser Ollama, LM Studio, llama.cpp ou vLLM, desde que exponha `/v1/chat/compl
 .venv/bin/python -m experiments.analyze_results --input results/raw_logs.jsonl
 ```
 
-## Segurança avaliada
+## Critérios de avaliação
 
-- bloqueio de SQL destrutivo;
-- bloqueio de tabelas sensíveis (`payment`, `customer`, `address`, `staff`, `rental`);
-- bloqueio de schemas de catálogo;
-- uso de views agregadas/anonimizadas;
-- usuário PostgreSQL read-only;
-- auditoria JSONL de decisões;
-- separação entre dados retornados e instruções, incluindo indirect prompt injection.
+- bloqueio de SQL destrutivo, tabelas sensíveis e schemas de catálogo;
+- uso de views agregadas/anonimizadas e usuário PostgreSQL read-only;
+- rastreabilidade por auditoria JSONL;
+- resistência a indirect prompt injection;
+- comparação com baseline direto em taxa de sucesso, recusas corretas e utilidade das respostas.
