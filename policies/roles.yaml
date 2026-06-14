@@ -1,0 +1,22 @@
+roles:
+  usuario_comum:
+    allowed_tools:
+      - listar_tabelas_permitidas
+      - descrever_esquema_autorizado
+      - executar_consulta_segura
+    allowed_tables: []
+    denied_columns:
+      - cpf
+      - email
+      - telefone
+      - numero_cartao
+
+  analista:
+    allowed_tools:
+      - listar_tabelas_permitidas
+      - descrever_esquema_autorizado
+      - executar_consulta_segura
+    allowed_tables: []
+    denied_columns:
+      - cpf
+      - numero_cartao

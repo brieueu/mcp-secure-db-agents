@@ -1,0 +1,1 @@
+-- Placeholder: papéis e permissões read-only para o Servidor MCP.

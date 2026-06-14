@@ -1,0 +1,2 @@
+-- Placeholder: schema da base experimental.
+-- Próxima etapa: adicionar Sakila PostgreSQL ou base pública equivalente.

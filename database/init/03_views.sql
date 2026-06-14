@@ -1,0 +1,1 @@
+-- Placeholder: views seguras para exposição ao agente LLM.

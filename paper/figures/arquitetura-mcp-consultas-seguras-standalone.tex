@@ -1,0 +1,143 @@
+\documentclass[tikz,border=8pt]{standalone}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[brazil]{babel}
+\usepackage{tikz}
+\usetikzlibrary{positioning, arrows.meta, fit, backgrounds, shapes.geometric}
+
+\begin{document}
+
+\begin{tikzpicture}[
+    font=\small,
+    node distance=1.2cm and 1.4cm,
+    >=Latex,
+    component/.style={
+        rectangle,
+        rounded corners=3pt,
+        draw=black!70,
+        fill=blue!6,
+        very thick,
+        align=center,
+        minimum width=3.1cm,
+        minimum height=0.9cm
+    },
+    security/.style={
+        rectangle,
+        rounded corners=3pt,
+        draw=black!70,
+        fill=orange!12,
+        thick,
+        align=center,
+        minimum width=3.1cm,
+        minimum height=0.85cm
+    },
+    storage/.style={
+        cylinder,
+        shape border rotate=90,
+        aspect=0.25,
+        draw=black!70,
+        fill=green!10,
+        very thick,
+        align=center,
+        minimum width=3.2cm,
+        minimum height=1.2cm
+    },
+    log/.style={
+        rectangle,
+        rounded corners=3pt,
+        draw=black!70,
+        fill=purple!10,
+        thick,
+        align=center,
+        minimum width=3.1cm,
+        minimum height=0.85cm
+    },
+    arrow/.style={->, very thick, draw=black!75},
+    dashedarrow/.style={->, thick, dashed, draw=black!60},
+    blocklabel/.style={font=\bfseries\small, align=center}
+]
+
+\node[component] (user) {Usuário};
+\node[component, below=of user] (ui) {Interface\\Conversacional};
+\node[component, below=of ui] (agent) {Agente LLM};
+\node[component, below=of agent] (client) {Cliente MCP};
+
+\node[security, below left=1.4cm and 1.1cm of client] (catalog) {Catálogo de\\Ferramentas};
+\node[security, right=of catalog] (auth) {Autenticação e\\Autorização};
+\node[security, below=of catalog] (validator) {Validador\\de SQL};
+\node[security, right=of validator] (policy) {Motor de\\Políticas};
+\node[security, below=of validator] (sanitize) {Sanitização de\\Entrada/Saída};
+\node[log, right=of sanitize] (audit) {Auditoria\\e Logs};
+\node[component, below=1.1cm of sanitize, xshift=2.25cm] (adapter) {Adaptador SQL};
+
+\node[storage, below=1.4cm of adapter] (db) {Banco de Dados\\Relacional};
+
+\begin{pgfonlayer}{background}
+\node[
+    draw=black!60,
+    rounded corners=6pt,
+    fill=gray!5,
+    very thick,
+    fit=(catalog) (auth) (validator) (policy) (sanitize) (audit) (adapter),
+    inner sep=0.45cm,
+    label={[blocklabel]above:Servidor MCP de Banco de Dados}
+] (mcpbox) {};
+\end{pgfonlayer}
+
+\draw[arrow] (user) -- node[right]{pergunta em linguagem natural} (ui);
+\draw[arrow] (ui) -- (agent);
+\draw[arrow] (agent) -- node[right]{chamada de ferramenta} (client);
+\draw[arrow] (client) -- node[right, xshift=0.1cm]{requisição MCP} (mcpbox.north);
+
+\draw[arrow] (catalog) -- node[above]{ferramentas permitidas} (auth);
+\draw[arrow] (catalog) -- (validator);
+\draw[arrow] (auth) -- (policy);
+\draw[arrow] (validator) -- node[above]{consulta candidata} (policy);
+\draw[arrow] (validator) -- (sanitize);
+\draw[arrow] (policy) -- (audit);
+\draw[arrow] (sanitize) -- (adapter);
+\draw[arrow] (policy) |- node[pos=0.25, right]{aprova/bloqueia} (adapter);
+\draw[arrow] (adapter) -- node[right]{SQL validado} (db);
+
+\draw[dashedarrow] (db.east) -- ++(1.0,0) |- node[pos=0.25, right]{resultado} (audit.east);
+\draw[dashedarrow] (audit.east) -- ++(1.2,0) |- node[pos=0.25, right]{resposta auditada} (client.east);
+\draw[dashedarrow] (client.west) -- ++(-1.0,0) |- (agent.west);
+\draw[dashedarrow] (agent.west) -- ++(-1.2,0) |- node[pos=0.25, left]{resposta final} (ui.west);
+
+\node[
+    rectangle,
+    rounded corners=3pt,
+    draw=red!60,
+    fill=red!5,
+    align=left,
+    text width=4.2cm,
+    right=1.7cm of policy
+] (threats) {\textbf{Ameaças mitigadas}\newline
+-- SQL destrutivo\newline
+-- acesso indevido\newline
+-- vazamento de dados\newline
+-- prompt injection\newline
+-- indirect injection\newline
+-- tool poisoning};
+
+\node[
+    rectangle,
+    rounded corners=3pt,
+    draw=green!50!black,
+    fill=green!5,
+    align=left,
+    text width=4.2cm,
+    left=1.6cm of validator
+] (rules) {\textbf{Regras de segurança}\newline
+-- permitir apenas SELECT\newline
+-- aplicar menor privilégio\newline
+-- consultar views seguras\newline
+-- bloquear tabelas sensíveis\newline
+-- registrar chamadas};
+
+\draw[dashedarrow] (rules.east) -- (validator.west);
+\draw[dashedarrow] (policy.east) -- (threats.west);
+
+\end{tikzpicture}
+
+\end{document}
