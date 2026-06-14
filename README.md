@@ -6,13 +6,56 @@ Arquitetura baseada em **Model Context Protocol (MCP)** para consultas seguras d
 
 Avaliar se uma arquitetura mediada por MCP aumenta a segurança, o controle e a rastreabilidade de consultas realizadas por agentes LLM em bancos de dados relacionais, quando comparada a uma integração direta entre agente e banco.
 
-## Arquitetura resumida
+## Arquitetura proposta
 
-```text
-Usuário → agente Python → Qwen local → ferramentas MCP → validação/política/auditoria → PostgreSQL read-only
+O agente não acessa o banco diretamente. Toda consulta passa por `listar_tabelas_permitidas`, `descrever_esquema_autorizado` e `executar_consulta_segura`, ferramentas MCP que concentram validação, autorização, auditoria e execução controlada.
+
+```mermaid
+flowchart LR
+  Usuario((" "))
+  Interface["<b>Interface</b><br/>Conversacional"]
+  Agente["<b>Agente LLM</b><br/>Orquestrador"]
+  Modelo["<b>Modelo local</b><br/>Qwen2.5-Coder"]
+  Cliente["<b>Cliente MCP</b><br/>Protocolo de Contexto"]
+
+  subgraph Servidor["Servidor MCP"]
+    direction TB
+    Entrada["<b>Servidor MCP</b><br/>Gateway de Entrada"]
+    Auth["<b>Autenticação</b><br/>Identificação"]
+    Validador["<b>Validador SQL</b><br/>Análise de Sintaxe e<br/>Semântica"]
+    Politicas["<b>Motor de Políticas</b><br/>Regras de Acesso"]
+    Adaptador["<b>Adaptador SQL</b><br/>Execução de Consulta"]
+  end
+
+  Banco[("<b>Banco de Dados</b><br/>PostgreSQL / Sakila")]
+
+  Usuario -- "Prompt" --> Interface
+  Interface -- "Requisição" --> Agente
+  Agente <-- "Geração de SQL" --> Modelo
+  Agente -- "Chamada" --> Cliente
+  Cliente -- "Requisição MCP" --> Entrada
+  Entrada -- "Credenciais" --> Auth
+  Auth -- "Identidade confirmada" --> Politicas
+  Entrada -- "Consulta candidata" --> Validador
+  Validador -- "Consulta válida" --> Adaptador
+  Politicas -- "Permissão OK" --> Adaptador
+  Adaptador -- "Executar SQL" --> Banco
+  Banco -- "Resultado" --> Adaptador
+
+  classDef interface fill:#d8e9ff,stroke:#7aa6d9,stroke-width:1px,color:#111;
+  classDef mcp fill:#dff2dc,stroke:#69a96d,stroke-width:1px,color:#111;
+  classDef security fill:#fff0bd,stroke:#d7a928,stroke-width:1px,color:#111;
+  classDef database fill:#e6d8ef,stroke:#9a69ad,stroke-width:1px,color:#111;
+  classDef actor fill:#ffffff,stroke:#111,stroke-width:1px,color:#111;
+
+  class Usuario actor;
+  class Interface,Agente,Modelo,Cliente interface;
+  class Entrada mcp;
+  class Auth,Validador,Politicas,Adaptador security;
+  class Banco database;
 ```
 
-O agente não acessa o banco diretamente. Toda consulta passa por `listar_tabelas_permitidas`, `descrever_esquema_autorizado` e `executar_consulta_segura`.
+A arquitetura separa a geração de SQL da sua execução. O modelo local propõe uma consulta a partir do esquema autorizado, mas o servidor MCP só executa o SQL depois de validar o comando, verificar objetos permitidos, aplicar a política do papel ativo e registrar a decisão em auditoria.
 
 ## Estrutura
 
