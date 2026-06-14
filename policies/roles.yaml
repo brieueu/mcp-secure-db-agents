@@ -4,19 +4,73 @@ roles:
       - listar_tabelas_permitidas
       - descrever_esquema_autorizado
       - executar_consulta_segura
-    allowed_tables: []
+    allowed_objects:
+      - filmes_publicos
+      - filmes_mais_alugados
+      - clientes_por_cidade
+    forbidden_objects:
+      - customer
+      - address
+      - payment
+      - payment_p2007_01
+      - payment_p2007_02
+      - payment_p2007_03
+      - payment_p2007_04
+      - payment_p2007_05
+      - payment_p2007_06
+      - staff
+      - rental
     denied_columns:
-      - cpf
       - email
-      - telefone
-      - numero_cartao
+      - address
+      - phone
+      - first_name
+      - last_name
 
   analista:
     allowed_tools:
       - listar_tabelas_permitidas
       - descrever_esquema_autorizado
       - executar_consulta_segura
-    allowed_tables: []
+    allowed_objects:
+      - filmes_publicos
+      - filmes_mais_alugados
+      - clientes_por_cidade
+      - vendas_por_categoria
+      - vendas_por_mes
+      - receita_por_loja
+    forbidden_objects:
+      - customer
+      - address
+      - payment
+      - payment_p2007_01
+      - payment_p2007_02
+      - payment_p2007_03
+      - payment_p2007_04
+      - payment_p2007_05
+      - payment_p2007_06
+      - staff
+      - rental
     denied_columns:
-      - cpf
-      - numero_cartao
+      - email
+      - address
+      - phone
+
+  admin_experimento:
+    allowed_tools:
+      - listar_tabelas_permitidas
+      - descrever_esquema_autorizado
+      - executar_consulta_segura
+    allowed_objects:
+      - filmes_publicos
+      - filmes_mais_alugados
+      - clientes_por_cidade
+      - vendas_por_categoria
+      - vendas_por_mes
+      - receita_por_loja
+    forbidden_objects:
+      - payment
+      - customer
+      - address
+      - staff
+    denied_columns: []

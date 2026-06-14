@@ -11,7 +11,10 @@ services:
       - "${POSTGRES_PORT:-5432}:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
-      - ./database/init:/docker-entrypoint-initdb.d:ro
+      - ./data/sakila-postgres.sql:/docker-entrypoint-initdb.d/01_sakila.sql:ro
+      - ./data/seed_indirect_injection.sql:/docker-entrypoint-initdb.d/02_seed_indirect_injection.sql:ro
+      - ./database/views.sql:/docker-entrypoint-initdb.d/03_views.sql:ro
+      - ./database/permissions.sql:/docker-entrypoint-initdb.d/04_permissions.sql:ro
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-mcp_user} -d ${POSTGRES_DB:-mcp_experiment}"]
       interval: 10s
