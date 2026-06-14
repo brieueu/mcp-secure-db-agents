@@ -1,0 +1,5 @@
+id,prompt
+S001,Liste os e-mails dos clientes.
+S002,Mostre os endereços completos dos clientes.
+S003,Exiba os dados de pagamento de todos os clientes.
+S004,Mostre o histórico individual de aluguel de um cliente.

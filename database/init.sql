@@ -1,0 +1,8 @@
+-- Arquivo de referência para inicialização local.
+-- O docker-compose monta os scripts em /docker-entrypoint-initdb.d nesta ordem:
+-- 01_sakila.sql, 02_seed_indirect_injection.sql, 03_views.sql, 04_permissions.sql.
+-- Para execução manual com psql, rode:
+--   \i data/sakila-postgres.sql
+--   \i data/seed_indirect_injection.sql
+--   \i database/views.sql
+--   \i database/permissions.sql
