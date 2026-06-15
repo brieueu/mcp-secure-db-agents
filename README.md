@@ -5,9 +5,9 @@
 <h1 align="center">MCP Secure DB Agents</h1>
 
 <p align="center">
-  <a href="https://drive.google.com/file/d/1HmPmwuPs4wqTcEw_dlu4C-D6iK2_IWm-/view?usp=sharing">Artigos preliminares</a> |
+  <a href="https://drive.google.com/file/d/1HmPmwuPs4wqTcEw_dlu4C-D6iK2_IWm-/view?usp=sharing">Artigos preliminar</a> |
   <a href="LICENSE">Licença MIT</a> |
-  <a href="CITATION.cff">Citations</a>
+  <a href="CITATION.cff">Citação</a>
 </p>
 
 <p align="center">
@@ -98,19 +98,6 @@ paper/          artigo local ignorado pelo Git
 - resistência a indirect prompt injection;
 - comparação com baseline direto em taxa de sucesso, recusas corretas e utilidade das respostas.
 
-## Licença
-
-Este projeto é distribuído sob a licença MIT. Consulte o arquivo [`LICENSE`](LICENSE) para os termos completos de uso, modificação e distribuição do código.
-
-## Como citar
-
-Se este repositório for usado em pesquisa acadêmica, cite o software usando os metadados disponíveis em [`CITATION.cff`](CITATION.cff). No GitHub, a opção **Cite this repository** usa esse arquivo para gerar citações automaticamente.
-
-Citação sugerida em texto:
-
-```text
-Vieira, José Gabriel de Almeida. MCP Secure DB Agents. Versão 0.1.0, 2026. Disponível em: https://github.com/brieueu/mcp-secure-db-agents.
-```
 
 ## Referências bibliográficas
 
@@ -133,3 +120,7 @@ Vieira, José Gabriel de Almeida. MCP Secure DB Agents. Versão 0.1.0, 2026. Dis
 [9] IEEE XPLORE. Model Context Contracts: MCP-Enabled Framework to Integrate LLMs With Blockchain. IEEE Xplore. Disponível em: https://ieeexplore.ieee.org/. Acesso em: 11 jun. 2026.
 
 [10] IEEE XPLORE. A Comprehensive Study and Implementation of Agentic AI via MCP Servers. IEEE Xplore. Disponível em: https://ieeexplore.ieee.org/. Acesso em: 11 jun. 2026.
+
+## Licença
+
+Este projeto é distribuído sob a licença MIT. Consulte o arquivo [`LICENSE`](LICENSE) para os termos completos de uso, modificação e distribuição do código.
